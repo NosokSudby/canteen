@@ -128,28 +128,48 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if(held2Object == null)
+                if (held2Object == null)
                 {
                     TryPlaceObject();
                 }
             }
             if (held2Object == null)
             {
-                if(heldObject != null && heldObject.CompareTag("plate"))
+                if (heldObject != null && heldObject.CompareTag("plate"))
                 {
-                    TryPickUpSecondObject();
+                    //TryPickUpSecondObject();
                 }
             }
             else
             {
-                TryPlaceSecondObject();
+                //TryPlaceSecondObject();
             }
+
+
         }
         handTransformToSync.position = handTransform.position;
         hand2TransformToSync.position = hand2Transform.position;
 
         handTransformToSync.rotation = handTransform.rotation;
         hand2TransformToSync.rotation = hand2Transform.rotation;
+    }
+    void PickUpPlateOnTray()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, pickUpRange, interactableLayer))
+        {
+            PhotonView targetPV = hit.collider.GetComponent<PhotonView>();
+            if (targetPV != null && hit.collider.CompareTag("plate"))
+            {
+                // Запрашиваем владение объектом перед поднятием
+                targetPV.RequestOwnership();
+                PV.RPC("PlacePlate", RpcTarget.All, targetPV.ViewID);
+            }
+        }
+    }
+    void PlacePlateeeOnTray()
+    {
+
     }
     private void TryPickUpObject()
     {
@@ -254,7 +274,6 @@ public class PlayerController : MonoBehaviour
     {
         GameObject targetObject = PhotonView.Find(viewID).gameObject;
         held2Object = targetObject;
-        OGsize = held2Object.transform.localScale;
         Rigidbody objectRb = held2Object.GetComponent<Rigidbody>();
         if (objectRb != null)
         {
@@ -284,14 +303,33 @@ public class PlayerController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 6f, placeableLayer))
         {
-            if(heldObject.transform.name == "bread box")
+            if (hit.collider.CompareTag("table"))
             {
-                Vector3 d = new Vector3(hit.point.x, hit.point.y + 0.029669f, hit.point.z);
-                PV.RPC("PlaceObject", RpcTarget.All, d);
+                if (heldObject.CompareTag("plate"))
+                {
+                    canteenTableSc cts = hit.collider.transform.parent.GetComponent<canteenTableSc>();
+                    if (cts.childrenCount > cts.platesCount)
+                    {
+                        PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                    }
+                }
+                else
+                {
+                    if (heldObject.transform.name == "bread box")
+                    {
+                        Vector3 d = new Vector3(hit.point.x, hit.point.y + 0.029669f, hit.point.z);
+                        PV.RPC("PlaceObject", RpcTarget.All, d, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                    }
+                    else
+                    {
+                        PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                    }
+                }
+
             }
             else
             {
-                PV.RPC("PlaceObject", RpcTarget.All, hit.point);
+                PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
             }
         }
     }
@@ -300,16 +338,27 @@ public class PlayerController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 6f, placeableLayer))
         {
-            
-            PV.RPC("PlaceSecondObject", RpcTarget.All, hit.point);
-            
+            if (hit.collider.CompareTag("table"))
+            {
+                canteenTableSc cts = hit.collider.transform.parent.GetComponent<canteenTableSc>();
+                if(cts.childrenCount > cts.platesCount)
+                {
+                    PV.RPC("PlaceSecondObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                }
+            }
+            else
+            {
+                PV.RPC("PlaceSecondObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+            }
+
         }
     }
 
 
     [PunRPC]
-    private void PlaceObject(Vector3 position)
+    private void PlaceObject(Vector3 position, int otherID)
     {
+        GameObject hitThing = PhotonView.Find(otherID)?.gameObject;
         if (heldObject == null) return;
 
         Rigidbody objectRb = heldObject.GetComponent<Rigidbody>();
@@ -354,13 +403,15 @@ public class PlayerController : MonoBehaviour
         {
             rotate.x = -90;
             heldObject.transform.rotation = Quaternion.Euler(rotate);
+            heldObject.transform.SetParent(null);
+            heldObject.transform.localScale = OGsize;
         }
         else
         {
             rotate.x = 0;
             heldObject.transform.rotation = Quaternion.Euler(rotate);
+            heldObject.transform.SetParent(hitThing.transform.parent);
         }
-        heldObject.transform.SetParent(null);
         heldObject.transform.position = position;
 
         Collider[] colliders = heldObject.GetComponentsInChildren<Collider>();
@@ -373,13 +424,13 @@ public class PlayerController : MonoBehaviour
         {
             component.constraints = RigidbodyConstraints.None;
         }
-        heldObject.transform.localScale = OGsize;
         
         heldObject = null;
     }
     [PunRPC]
-    private void PlaceSecondObject(Vector3 position)
+    private void PlaceSecondObject(Vector3 position, int otherID)
     {
+        GameObject hitThing = PhotonView.Find(otherID)?.gameObject;
         if (held2Object == null) return;
 
         Rigidbody objectRb = held2Object.GetComponent<Rigidbody>();
@@ -390,7 +441,7 @@ public class PlayerController : MonoBehaviour
         rotate.x = 0;
         held2Object.transform.rotation = Quaternion.Euler(rotate);
 
-        held2Object.transform.SetParent(null);
+        held2Object.transform.SetParent(hitThing.transform.parent);
         held2Object.transform.position = position;
 
         Collider[] colliders = held2Object.GetComponentsInChildren<Collider>();
@@ -403,7 +454,6 @@ public class PlayerController : MonoBehaviour
         {
             component.constraints = RigidbodyConstraints.None;
         }
-        held2Object.transform.localScale = OGsize;
         held2Object = null;
     }
 

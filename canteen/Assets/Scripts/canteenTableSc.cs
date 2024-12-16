@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class canteenTableSc : MonoBehaviour
@@ -10,37 +11,48 @@ public class canteenTableSc : MonoBehaviour
     public Transform bench1;
     public Transform bench2;
 
+    public TMP_Text paperNumber;
+
+    public float platesCount;
+
+    public float childrenCount;
+
+    public List<GameObject> plates = new List<GameObject>();
+
     private void Start()
     {
         bench1 = this.transform.Find("firstBench");
         bench2 = this.transform.Find("secBench");
+        SetPaperNumber();
     }
-    void Update()
+    private void Update()
     {
-        if(firstBenchDown == false)
-        {
-            Vector3 benchPos = new Vector3(0.00661411509f, 0.254999995f, 0.488000005f);
-            bench1.localPosition = benchPos;
-        }
-        else
-        {
-            Vector3 benchPos = new Vector3(0.00661411509f, 0.17933172f, 0.6679492f);
-            bench1.localPosition = benchPos;
-        }
-        if(bench2 != null)
-        {
-            if (secondBenchDown == false)
-            {
-                Vector3 secBenchPos = new Vector3(0.00661411509f, 0.254999995f, -0.222000003f);
-                bench2.localPosition = secBenchPos;
-            }
-            else
-            {
-                Vector3 secBenchPos = new Vector3(0.00661411509f, 0.17933172f, -0.409160197f);
-                bench2.localPosition = secBenchPos;
-            }
-        }
+        platesCount = plates.Count;
+        
     }
 
-    
+    private void OnTransformChildrenChanged()
+    {
+        // Проходим по всем дочерним объектам
+        foreach (Transform child in transform)
+        {
+            // Проверяем, есть ли объект с именем "plate" и отсутствует ли он уже в списке
+            if (child.gameObject.CompareTag("plate") && !plates.Contains(child.gameObject))
+            {
+                // Добавляем в список
+                plates.Add(child.gameObject);
+                Debug.Log($"Добавлен объект: {child.gameObject.name}");
+            }
+        }
+
+        // Удаляем из списка отсутствующие в иерархии объекты
+        plates.RemoveAll(plate => plate == null || plate.transform.parent != transform);
+    }
+
+    void SetPaperNumber()
+    {
+        float randomFloat = Random.Range(6, 7);
+        childrenCount= randomFloat;
+        paperNumber.text = randomFloat.ToString();
+    }
 }
