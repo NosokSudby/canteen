@@ -262,6 +262,10 @@ public class PlayerController : MonoBehaviour
         {
             heldObject.transform.localRotation = Quaternion.identity;
         }
+        else
+        {
+            heldObject.GetComponent<PlateSc>().SetPicked();
+        }
 
         Collider[] colliders = heldObject.GetComponentsInChildren<Collider>();
         foreach (Collider collider in colliders)
