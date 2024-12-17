@@ -18,6 +18,13 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
 
     public float childrenCount;
 
+    public bool haveAllBread = false;
+    public bool haveAllSpoons = false;
+    public bool haveAllPlates = false;
+    public bool haveAllGlasses = false;
+
+    public bool ready = false;
+
     public List<GameObject> plates = new List<GameObject>();
     public List<GameObject> glasses = new List<GameObject>();
 
@@ -37,6 +44,31 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
         if (photonView.IsMine)
         {
             platesCount = plates.Count;
+            glassesCount = glasses.Count;
+        }
+        if(platesCount == childrenCount)
+        {
+            haveAllPlates = true;
+        }
+        else
+        {
+            haveAllPlates = false;
+        }
+        if(glassesCount == childrenCount )
+        {
+            haveAllGlasses = true;
+        }
+        else
+        {
+            haveAllGlasses = false;
+        }
+        if(haveAllBread == true && haveAllPlates == true && haveAllGlasses == true && haveAllSpoons == true && firstBenchDown == false && secondBenchDown == false)
+        {
+            ready = true;
+        }
+        else
+        {
+            ready = false;
         }
     }
 

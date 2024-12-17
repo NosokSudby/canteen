@@ -10,10 +10,32 @@ public class BreadBox : MonoBehaviourPun
     [SerializeField] Transform targetParent;
     [SerializeField] Transform sourceParent;
 
+
+    canteenTableSc cts;
+
+    float neededCountOfBread;
+
+    private void Start()
+    {
+        if(transform.parent!= null)
+        {
+            cts = transform.parent.GetComponent<canteenTableSc>();
+        }
+    }
     private void Update()
     {
         int sourceChildCount = sourceParent.childCount;
-
+        if(cts!= null)
+        {
+            if (breadCounter == cts.childrenCount)
+            {
+                cts.haveAllBread = true;
+            }
+            else
+            {
+                cts.haveAllBread = false;
+            }
+        }
         // Удаляем неактивные или удаленные ложки из списка
         breads.RemoveAll(bread => bread == null || !bread.activeInHierarchy);
         breadCounter = breads.Count; // Обновляем счетчик ложек

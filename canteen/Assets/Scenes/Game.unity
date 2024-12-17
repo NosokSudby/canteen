@@ -94014,7 +94014,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415629617}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -6.2002}
+  m_LocalPosition: {x: 0, y: 0, z: -1.3}
   m_LocalScale: {x: 0.4078, y: 0.58, z: 4.401349}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -94022,7 +94022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.3507e-10, y: 1.8}
+  m_AnchoredPosition: {x: -0, y: 1.8}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1415629619
@@ -94072,15 +94072,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 107.3
+  m_fontSizeBase: 107.3
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -108609,6 +108609,7 @@ Transform:
   - {fileID: 311732818}
   - {fileID: 4944355584538486962}
   - {fileID: 1216824875}
+  - {fileID: 2732561869743099474}
   m_Father: {fileID: 1717309769}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &543450652068529103
@@ -109415,6 +109416,11 @@ MonoBehaviour:
   platesCount: 0
   glassesCount: 0
   childrenCount: 0
+  haveAllBread: 0
+  haveAllSpoons: 0
+  haveAllPlates: 0
+  haveAllGlasses: 0
+  ready: 0
   plates: []
   glasses: []
 --- !u!114 &919132147527219681
@@ -113031,13 +113037,13 @@ Transform:
   m_GameObject: {fileID: 4457422308410563973}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.561954, y: 1.094568, z: 7.143916}
-  m_LocalScale: {x: 0.154555, y: 0.15455496, z: 0.15455496}
+  m_LocalPosition: {x: 0.21831435, y: 0.5321914, z: 0.08507909}
+  m_LocalScale: {x: 0.089252494, y: 0.07249703, z: 0.07249703}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 368335016}
   - {fileID: 833615211}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 543450652004590437}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2756115727420640808
 MeshFilter:
@@ -149995,7 +150001,6 @@ SceneRoots:
   - {fileID: 870514187}
   - {fileID: 1849378318}
   - {fileID: 8067997609119575788}
-  - {fileID: 2732561869743099474}
   - {fileID: 543450652221853143}
   - {fileID: 1379170570}
   - {fileID: 1267230900}

@@ -7,13 +7,49 @@ public class SpoonBasket : MonoBehaviourPun
     public float spoonCounter;
     public List<GameObject> spoons = new List<GameObject>();
 
+    canteenTableSc cts;
+
+
+    private void Start()
+    {
+        if(cts != null)
+        {
+            cts = transform.parent.GetComponent<canteenTableSc>();
+        }
+    }
+
     private void Update()
     {
         // Удаляем неактивные или удаленные ложки из списка
         spoons.RemoveAll(spoon => spoon == null || !spoon.activeInHierarchy);
         spoonCounter = spoons.Count; // Обновляем счетчик ложек
+
+        if(cts != null)
+        {
+            if (spoonCounter == cts.childrenCount)
+            {
+                photonView.RPC("HaveAllSpoons", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
+            }
+            else
+            {
+                photonView.RPC("DoesntHaveAllSpoons", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
+            }
+        }
     }
 
+    [PunRPC]
+    void HaveAllSpoons(int ctsID)
+    {
+        canteenTableSc cts = PhotonView.Find(ctsID)?.gameObject.GetComponent<canteenTableSc>();
+        cts.haveAllSpoons = true;
+    }
+
+    [PunRPC]
+    void DoesntHaveAllSpoons(int ctsID)
+    {
+        canteenTableSc cts = PhotonView.Find(ctsID)?.gameObject.GetComponent<canteenTableSc>();
+        cts.haveAllSpoons = false;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("spoon") && !spoons.Contains(other.gameObject))

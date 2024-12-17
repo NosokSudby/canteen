@@ -22,11 +22,15 @@ public class BenchLift : MonoBehaviourPun, IPunObservable
 
     public bool lifted = false;
 
+    canteenTableSc cts;
+
+    string whichBenchIsThisLeftOrRight;
+
     void Start()
     {
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody>();
-
+        cts = transform.parent.GetComponent<canteenTableSc>();
         if (rb == null)
         {
             Debug.LogError("Скамейка должна содержать Rigidbody!");
@@ -45,6 +49,13 @@ public class BenchLift : MonoBehaviourPun, IPunObservable
         else
         {
             rb.isKinematic = false; // Физика активна только у владельца
+        }
+        if(whichBenchIsThisLeftOrRight == "left")
+        {
+            cts.firstBenchDown = !lifted;
+        }else if(whichBenchIsThisLeftOrRight=="right")
+        {
+            cts.secondBenchDown = !lifted;
         }
     }
 

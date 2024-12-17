@@ -180,9 +180,23 @@ public class PlayerController : MonoBehaviour
             PhotonView targetPV = hit.collider.GetComponent<PhotonView>();
             if (targetPV != null)
             {
-                // Запрашиваем владение объектом перед поднятием
-                targetPV.RequestOwnership();
-                PV.RPC("PickUpObject", RpcTarget.All, targetPV.ViewID);
+                if (hit.collider.CompareTag("spoonBasket"))
+                {
+
+                    if (hit.collider.GetComponentsInChildren<DragObject>().Length == 0)
+                    {
+                        // Запрашиваем владение объектом перед поднятием
+                        targetPV.RequestOwnership();
+                        PV.RPC("PickUpObject", RpcTarget.All, targetPV.ViewID);
+                    }
+                }
+                else
+                {
+                    // Запрашиваем владение объектом перед поднятием
+                    targetPV.RequestOwnership();
+                    PV.RPC("PickUpObject", RpcTarget.All, targetPV.ViewID);
+                }
+
             }
         }
     }
@@ -457,6 +471,19 @@ public class PlayerController : MonoBehaviour
                 heldObject.transform.localScale = OGsize;
                 rotate.x = -90;
                 heldObject.transform.rotation = Quaternion.Euler(rotate);
+                if (!heldObject.CompareTag("breadBox"))
+                {
+                    heldObject.transform.localScale = OGsize;
+                    rotate.x = -90;
+                    heldObject.transform.SetParent(hitThing.transform.parent);
+                    heldObject.transform.rotation = Quaternion.Euler(rotate);
+                }
+                else
+                {
+                    rotate.x = 0;
+                    heldObject.transform.rotation = Quaternion.Euler(rotate);
+                    heldObject.transform.SetParent(hitThing.transform.parent);
+                }
             }
             else
             {
