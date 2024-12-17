@@ -59,6 +59,12 @@ MonoBehaviour:
   - setParent
   - PickUpSecondObject
   - PlaceSecondObject
+  - Setp
+  - SP
+  - SetF
+  - KinematicOn
+  - SyncChildObjects
+  - SyncPaperNumber
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

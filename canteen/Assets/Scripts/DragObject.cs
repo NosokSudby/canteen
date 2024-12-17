@@ -70,14 +70,29 @@ public class DragObject : MonoBehaviourPun, IPunObservable
             }
             
         }
+        if (CompareTag("glass"))
+        {
+            photonView.RPC("SP", RpcTarget.All);
+        }
         // Сохраняем текущую дистанцию до объекта
         distanceFromPlayer = Vector3.Distance(Camera.main.transform.position, transform.position);
 
         // Сохраняем смещение между объектом и курсором
         offset = transform.position - GetMouseWorldPosAtDistance();
 
-        rb.isKinematic = true;
+        photonView.RPC("KinematicOn", RpcTarget.All);
         isDragging = true;
+    }
+
+    [PunRPC]
+    void SP()
+    {
+        transform.SetParent(null);
+    }
+    [PunRPC]
+    void KinematicOn()
+    {
+        rb.isKinematic = true;
     }
 
     private void OnMouseUp()

@@ -15,6 +15,7 @@ TagManager:
   - tableForDishes
   - plate
   - tray
+  - glass
   layers:
   - Default
   - TransparentFX

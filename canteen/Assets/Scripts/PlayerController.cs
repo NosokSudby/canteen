@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -246,25 +247,60 @@ public class PlayerController : MonoBehaviour
                     lid.GetComponent<Rigidbody>().isKinematic = true;
                 }
             }
-            
         }
-
+        if (heldObject.CompareTag("tray"))
+        {
+            GameObject glassesToActivate = heldObject.transform.Find("pickedGlasses").gameObject;
+            GameObject glassesToDisable = heldObject.transform.Find("normalGlasses").gameObject;
+            if (glassesToActivate != null && glassesToDisable != null)
+            {
+                glassesToActivate.SetActive(true);
+                glassesToDisable.SetActive(false);
+            }
+        }
         if (PV.IsMine)
         {
-            heldObject.transform.SetParent(handTransform);
+            if (heldObject.CompareTag("tray"))
+            {
+                heldObject.transform.SetParent(handTransform);
+            }
+            else
+            {
+                heldObject.transform.SetParent(handTransform);
+            }
         }
         else
         {
-            heldObject.transform.SetParent(handTransformToSync);
+            
+             heldObject.transform.SetParent(handTransformToSync);
+            
         }
-        heldObject.transform.localPosition = Vector3.zero;
-        if (!heldObject.CompareTag("plate"))
+        if (heldObject.transform.CompareTag("tray"))
         {
-            heldObject.transform.localRotation = Quaternion.identity;
+            Vector3 newPos = new Vector3(-0.0113000004f, -0.0769999996f, -0.0516999997f);
+            heldObject.transform.localPosition = newPos;
         }
         else
+        {
+            heldObject.transform.localPosition = Vector3.zero;
+        }
+        
+        if (heldObject.CompareTag("plate"))
         {
             heldObject.GetComponent<PlateSc>().SetPicked();
+        }
+        else
+        {
+            if (!heldObject.transform.CompareTag("tray"))
+            {
+                heldObject.transform.localRotation = Quaternion.identity;
+            }
+            else
+            {
+                Vector3 rotate = transform.eulerAngles;
+                rotate.Set(324f, -9.23406878e-06f, 176.099869f);
+                heldObject.transform.localRotation = Quaternion.Euler(rotate);
+            }
         }
 
         Collider[] colliders = heldObject.GetComponentsInChildren<Collider>();
@@ -326,8 +362,17 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        if (heldObject.transform.CompareTag("tray"))
+                        {
+                            Vector3 ds = new Vector3(hit.point.x, hit.point.y + 0.046f, hit.point.z);
+                            PV.RPC("PlaceObject", RpcTarget.All, ds, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        }
+                        else
+                        {
+                            PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        }
                     }
+                        
                 }
 
             }
@@ -381,6 +426,7 @@ public class PlayerController : MonoBehaviour
                 spoonsToDisable.SetActive(false);
             }
         }
+        
         if (heldObject.transform.name == "bread box")
         {
             GameObject breadsToActivate = heldObject.transform.Find("pickedBread").gameObject;
@@ -412,6 +458,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if (heldObject.CompareTag("tray"))
+            {
+                heldObject.transform.SetParent(hitThing.transform.parent);
+            }
             rotate.x = 0;
             heldObject.transform.rotation = Quaternion.Euler(rotate);
             heldObject.transform.SetParent(hitThing.transform.parent);
@@ -428,7 +478,16 @@ public class PlayerController : MonoBehaviour
         {
             component.constraints = RigidbodyConstraints.None;
         }
-        
+        if (heldObject.CompareTag("tray"))
+        {
+            GameObject glassesToActivate = heldObject.transform.Find("normalGlasses").gameObject;
+            GameObject glassesToDisable = heldObject.transform.Find("pickedGlasses").gameObject;
+            if (glassesToActivate != null && glassesToDisable != null)
+            {
+                glassesToActivate.SetActive(true);
+                glassesToDisable.SetActive(false);
+            }
+        }
         heldObject = null;
     }
     [PunRPC]

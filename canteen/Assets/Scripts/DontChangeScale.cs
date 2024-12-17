@@ -5,19 +5,29 @@ using UnityEngine;
 
 public class DontChangeScale : MonoBehaviour
 {
-    
+    private Vector3 initialScale;
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Сохраняем начальный масштаб дочернего объекта
+        initialScale = transform.localScale;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.parent == null)
+        if (transform.parent != null)
         {
-            this.transform.localScale = new Vector3(3.366371f, 3.36637f, 2.953115f);
+            transform.localScale = new Vector3(
+                initialScale.x / transform.parent.lossyScale.x,
+                initialScale.y / transform.parent.lossyScale.y,
+                initialScale.z / transform.parent.lossyScale.z
+            );
+        }
+        else
+        {
+            // Если у объекта нет родителя, просто сохраняем начальный масштаб
+            transform.localScale = initialScale;
         }
     }
 }
