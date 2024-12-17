@@ -46,7 +46,7 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
             platesCount = plates.Count;
             glassesCount = glasses.Count;
         }
-        if(platesCount == childrenCount)
+        if(platesCount >= childrenCount)
         {
             haveAllPlates = true;
         }
@@ -54,7 +54,7 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
         {
             haveAllPlates = false;
         }
-        if(glassesCount == childrenCount )
+        if(glassesCount >= childrenCount )
         {
             haveAllGlasses = true;
         }
@@ -62,7 +62,7 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
         {
             haveAllGlasses = false;
         }
-        if(haveAllBread == true && haveAllPlates == true && haveAllGlasses == true && haveAllSpoons == true && firstBenchDown == false && secondBenchDown == false)
+        if(haveAllBread == true && haveAllPlates == true && haveAllGlasses == true && haveAllSpoons == true && firstBenchDown == true && secondBenchDown == true)
         {
             ready = true;
         }
@@ -108,7 +108,7 @@ public class canteenTableSc : MonoBehaviourPunCallbacks, IPunObservable
 
     void SetPaperNumber()
     {
-        float randomFloat = Random.Range(6, 7);
+        float randomFloat = Random.Range(1, 2);
         childrenCount = randomFloat;
         paperNumber.text = randomFloat.ToString();
 

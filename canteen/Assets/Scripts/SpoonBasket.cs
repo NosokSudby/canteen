@@ -12,7 +12,7 @@ public class SpoonBasket : MonoBehaviourPun
 
     private void Start()
     {
-        if(cts != null)
+        if (transform.parent != null)
         {
             cts = transform.parent.GetComponent<canteenTableSc>();
         }
@@ -26,7 +26,7 @@ public class SpoonBasket : MonoBehaviourPun
 
         if(cts != null)
         {
-            if (spoonCounter == cts.childrenCount)
+            if (spoonCounter >= cts.childrenCount)
             {
                 photonView.RPC("HaveAllSpoons", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
             }
@@ -34,6 +34,14 @@ public class SpoonBasket : MonoBehaviourPun
             {
                 photonView.RPC("DoesntHaveAllSpoons", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
             }
+        }
+    }
+
+    private void OnTransformParentChanged()
+    {
+        if (transform.parent != null)
+        {
+            cts = transform.parent.GetComponent<canteenTableSc>();
         }
     }
 

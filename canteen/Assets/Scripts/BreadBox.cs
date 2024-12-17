@@ -17,7 +17,7 @@ public class BreadBox : MonoBehaviourPun
 
     private void Start()
     {
-        if(transform.parent!= null)
+        if (transform.parent != null)
         {
             cts = transform.parent.GetComponent<canteenTableSc>();
         }
@@ -27,7 +27,7 @@ public class BreadBox : MonoBehaviourPun
         int sourceChildCount = sourceParent.childCount;
         if(cts!= null)
         {
-            if (breadCounter == cts.childrenCount)
+            if (breadCounter >= cts.childrenCount)
             {
                 cts.haveAllBread = true;
             }
@@ -42,6 +42,13 @@ public class BreadBox : MonoBehaviourPun
         photonView.RPC("ActivateNonMatchingChildren", RpcTarget.All, targetParent.GetComponent<PhotonView>().ViewID, sourceChildCount);
         photonView.RPC("DisableMatchingChildren", RpcTarget.All, targetParent.GetComponent<PhotonView>().ViewID, sourceChildCount);
 
+    }
+    private void OnTransformParentChanged()
+    {
+        if (transform.parent != null)
+        {
+            cts = transform.parent.GetComponent<canteenTableSc>();
+        }
     }
 
     private void OnTriggerStay(Collider other)

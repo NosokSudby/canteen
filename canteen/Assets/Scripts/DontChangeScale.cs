@@ -16,18 +16,21 @@ public class DontChangeScale : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.parent != null)
-        {
-            transform.localScale = new Vector3(
-                initialScale.x / transform.parent.lossyScale.x,
-                initialScale.y / transform.parent.lossyScale.y,
-                initialScale.z / transform.parent.lossyScale.z
-            );
-        }
-        else
-        {
-            // Если у объекта нет родителя, просто сохраняем начальный масштаб
-            transform.localScale = initialScale;
-        }
+        
+            if (transform.parent != null)
+            {
+                transform.localScale = new Vector3(
+                    initialScale.x / transform.parent.lossyScale.x,
+                    initialScale.y / transform.parent.lossyScale.y,
+                    initialScale.z / transform.parent.lossyScale.z
+                );
+            }
+            else
+            {
+                // Если у объекта нет родителя, просто сохраняем начальный масштаб
+                transform.localScale = initialScale;
+            }
+        
+        
     }
 }

@@ -386,13 +386,21 @@ public class PlayerController : MonoBehaviour
                             PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
                         }
                     }
-                        
+
                 }
 
             }
             else
             {
-                PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                if (heldObject.transform.CompareTag("tray"))
+                {
+                    Vector3 ds = new Vector3(hit.point.x, hit.point.y + 0.046f, hit.point.z);
+                    PV.RPC("PlaceObject", RpcTarget.All, ds, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                }
+                else
+                {
+                    PV.RPC("PlaceObject", RpcTarget.All, hit.point, hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                }
             }
         }
     }

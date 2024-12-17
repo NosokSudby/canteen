@@ -24,7 +24,7 @@ public class BenchLift : MonoBehaviourPun, IPunObservable
 
     canteenTableSc cts;
 
-    string whichBenchIsThisLeftOrRight;
+    public string whichBenchIsThisLeftOrRight;
 
     void Start()
     {

@@ -5,28 +5,30 @@ using Photon.Pun;
 
 public class Glass : MonoBehaviourPun
 {
-    private void OnTriggerStay(Collider other)
+    public bool setted = false;
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("table"))
         {
             if (transform.parent == null)
             {
                 photonView.RPC("Setp", RpcTarget.All, transform.GetComponent<PhotonView>().ViewID, other.gameObject.GetComponent<PhotonView>().ViewID);
+                setted = true;
             }
             
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("table"))
+        if(setted == true)
         {
-            if (transform.parent != null)
+            if (other.gameObject.CompareTag("table"))
             {
-                photonView.RPC("SetF", RpcTarget.All, transform.GetComponent<PhotonView>().ViewID, other.gameObject.GetComponent<PhotonView>().ViewID);
+                photonView.RPC("SetF", RpcTarget.All, transform.GetComponent<PhotonView>().ViewID);
             }
-
         }
     }
+
     [PunRPC]
     void Setp(int objectID, int otherID)
     {
@@ -35,10 +37,9 @@ public class Glass : MonoBehaviourPun
         objectToSet.SetParent(other.transform.parent);
     }
     [PunRPC]
-    void SetF(int objectID, int otherID)
+    void SetF(int objectID)
     {
         Transform objectToSet = PhotonView.Find(objectID)?.transform;
-        GameObject other = PhotonView.Find(otherID)?.gameObject;
         objectToSet.SetParent(null);
     }
 }
