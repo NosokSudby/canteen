@@ -65,6 +65,8 @@ MonoBehaviour:
   - KinematicOn
   - SyncChildObjects
   - SyncPaperNumber
+  - ResetP
+  - SetP
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

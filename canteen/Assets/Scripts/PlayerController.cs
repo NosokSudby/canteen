@@ -451,13 +451,23 @@ public class PlayerController : MonoBehaviour
         Vector3 rotate = transform.eulerAngles;
         if (!heldObject.CompareTag("plate"))
         {
-            rotate.x = -90;
-            heldObject.transform.rotation = Quaternion.Euler(rotate);
-            heldObject.transform.SetParent(null);
-            heldObject.transform.localScale = OGsize;
+            if (!heldObject.CompareTag("spoonBasket"))
+            {
+                heldObject.transform.SetParent(null);
+                heldObject.transform.localScale = OGsize;
+                rotate.x = -90;
+                heldObject.transform.rotation = Quaternion.Euler(rotate);
+            }
+            else
+            {
+                rotate.x = 0;
+                heldObject.transform.rotation = Quaternion.Euler(rotate);
+                heldObject.transform.SetParent(hitThing.transform.parent);
+            }
         }
         else
         {
+            // сам ес честно в ахере но пока шо работает так шо оставлю как есть (да, я про if(heldObject.CompareTag("tray")))
             if (heldObject.CompareTag("tray"))
             {
                 heldObject.transform.SetParent(hitThing.transform.parent);

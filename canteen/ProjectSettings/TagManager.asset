@@ -16,6 +16,7 @@ TagManager:
   - plate
   - tray
   - glass
+  - spoonBasket
   layers:
   - Default
   - TransparentFX
