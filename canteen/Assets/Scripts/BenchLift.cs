@@ -52,13 +52,26 @@ public class BenchLift : MonoBehaviourPun, IPunObservable
         }
         if(whichBenchIsThisLeftOrRight == "left")
         {
-            cts.firstBenchDown = !lifted;
-        }else if(whichBenchIsThisLeftOrRight=="right")
+            photonView.RPC("BenchFirst", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
+        }
+        else if(whichBenchIsThisLeftOrRight=="right")
         {
-            cts.secondBenchDown = !lifted;
+            photonView.RPC("BenchSecond", RpcTarget.All, cts.GetComponent<PhotonView>().ViewID);
         }
     }
 
+    [PunRPC]
+    void BenchFirst(int ctsID)
+    {
+        canteenTableSc cts = PhotonView.Find(ctsID)?.gameObject.GetComponent<canteenTableSc>();
+        cts.firstBenchDown = !lifted;
+    }
+    [PunRPC]
+    void BenchSecond(int ctsID)
+    {
+        canteenTableSc cts = PhotonView.Find(ctsID)?.gameObject.GetComponent<canteenTableSc>();
+        cts.secondBenchDown = !lifted;
+    }
 
     void OnMouseDown()
     {
@@ -146,22 +159,32 @@ public class BenchLift : MonoBehaviourPun, IPunObservable
         
         if (other.gameObject.CompareTag("floor"))
         {
-            lifted = true;
+            photonView.RPC("LiftedTrue", RpcTarget.All);
         }
     }
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("floor"))
         {
-            lifted = false;
+            photonView.RPC("LiftedFalse", RpcTarget.All);
         }
     }
     private void OnCollisionStay(Collision other)
     {
         if (other.gameObject.CompareTag("floor"))
         {
-            lifted = false;
+            photonView.RPC("LiftedFalse", RpcTarget.All);
         }
+    }
+    [PunRPC]
+    void LiftedTrue()
+    {
+        lifted = true;
+    }
+    [PunRPC]
+    void LiftedFalse()
+    {
+        lifted = false;
     }
     private void fOnTriggerExit(Collider other)
     {

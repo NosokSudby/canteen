@@ -89,3 +89,11 @@ Assets/StreamingAssets/UnityEngine.TestRunner/
 # Include these files if needed
 !Assets/AddressableAssetsData/*.asset
 !Assets/**/*.meta
+canteen/Library/ArtifactDB
+canteen/Library/SourceAssetDB
+canteen/Logs/AssetImportWorker0-prev.log
+canteen/Logs/AssetImportWorker0.log
+canteen/Logs/AssetImportWorker1-prev.log
+canteen/Logs/AssetImportWorker1.log
+canteen/Logs/shadercompiler-AssetImportWorker0.log
+canteen/Logs/shadercompiler-UnityShaderCompiler.exe0.log

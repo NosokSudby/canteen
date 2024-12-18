@@ -69,6 +69,10 @@ MonoBehaviour:
   - SetP
   - DoesntHaveAllSpoons
   - HaveAllSpoons
+  - BenchFirst
+  - BenchSecond
+  - LiftedTrue
+  - LiftedFalse
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
